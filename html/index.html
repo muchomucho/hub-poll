@@ -11,7 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script>
         // C'est la faute de guillaume qui sait config un server js que je code ici.
-
+        RIGHT = 0;
+        LEFT = 0;
         var socket = io('http://localhost');
 
         socket.on('change_question', function (data) {
@@ -21,7 +22,13 @@
         });
 
         socket.on('selected', function(data){
+            if (data.right)
+                RIGHT++;
+            if (data.left)
+                LEFT++;
             $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
+            $('#score-1').text(LEFT);
+            $('#score-2').text(RIGHT);
         });
 
 </script>
@@ -64,9 +71,11 @@ body{
         <div class="answer">
             <div class="col-xs-6 answer answer-1 vertical">
                 <p class="text-center" id="answer-1">Oui</p>
+                <p class="text-center" id="score-1">0</p>
             </div>
             <div class="col-xs-6 answer answer-2 vertical">
                 <p class="text-center" id="answer-2">Non</p>
+                <p class="text-center" id="score-2">0</p>                
             </div>
         </div>
     </div>
