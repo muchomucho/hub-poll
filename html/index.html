@@ -22,6 +22,7 @@
         });
 
         socket.on('selected', function(data){
+            console.log(data)
             if (data.right)
                 RIGHT++;
             if (data.left)
