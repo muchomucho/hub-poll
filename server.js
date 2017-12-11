@@ -8,6 +8,8 @@ var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 var fs = require('fs');
 
+var deviceName = "";
+
 console.log('version: ' + util.inspect(version, { depth: null }));
 console.log('devices: ' + util.inspect(devices, { depth: null }));
 
@@ -16,9 +18,23 @@ function read(deviceID) {
   var nfcdev = new nfc.NFC();
 
   nfcdev.on('read', function(tag) {
-        console.log("DATTAAAA");
+        if (deviceName == "")
+        {
+            deviceName = deviceID;
+        }
+        else if (deviceName == deviceID)
+        {
+          //gauche
+          console.log("gauche");
+        }
+        else
+        {
+          console.log("droite");
+          //droite
+        }
+        /*console.log("DATTAAAA");
         console.log(deviceID);
-        console.log(tag.uid);
+        console.log(tag.uid);*/
         nfcdev.stop();
   });
 
