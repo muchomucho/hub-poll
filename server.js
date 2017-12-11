@@ -17,6 +17,7 @@ function read(deviceID) {
 
   nfcdev.on('read', function(tag) {
         console.log("DATTAAAA");
+        console.log(deviceID);
         console.log(tag.uid);
         nfcdev.stop();
   });
