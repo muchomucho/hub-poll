@@ -18,23 +18,27 @@ function read(deviceID) {
   var nfcdev = new nfc.NFC();
 
   nfcdev.on('read', function(tag) {
+        data = []
+        data.left = false;
+        data.right = false;
         if (deviceName == "")
         {
             deviceName = deviceID;
         }
         else if (deviceName == deviceID)
-        {
-          //gauche
+        { // Left
+          data.left = true;
           console.log("gauche");
         }
         else
-        {
+        { // Right
+          data.right = true;
           console.log("droite");
-          //droite
         }
         /*console.log("DATTAAAA");
         console.log(deviceID);
         console.log(tag.uid);*/
+        io.emit('selected', data)
         nfcdev.stop();
   });
 
