@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script>
+        // C'est la faute de guillaume qui sait config un server js que je code ici.
+
+        var socket = io('http://localhost');
+
+        socket.on('change_question', function (data) {
+            $("question").text(data.question);
+            $("answer-1").text(data.answer_1);
+            $("answer-2").text(data.answer_2);
+        });
+
+</script>
 </head>
 <style>
 body{
@@ -16,34 +29,38 @@ body{
 }
 .question{
     margin: 0;
-    background-color: black;
+    background-color: #2c3e50;
     color: #ecf0f1;
     height: 10vh;
+    padding-top: 3vh;
 }
-
 .answer{
     height: 90vh;
 }
+.vertical{
+    padding-top: 40vh;
+}
 .answer-1{
-    vertical-align: middle;
-
+    background-color: #27ae60;
+    color: #ecf0f1;
 }
 .answer-2{
-    vertical-align: middle;
-
+    background-color: #c0392b;
+    color: #ecf0f1;
 }
-
 </style>
 <body>
     <cheval class="poney">
         <div class="text-center">
-            <h1 class="question">Ma super question qui tue ?</h1>
+            <h1 class="question" id="question">Ma super question qui tue ?</h1>
         </div>
-        <div class="col-xs-6 answer answer-1">
-            <h2 class="text-center">Bonjour</h2>
-        </div>
-        <div class="col-xs-6 answer answer-2">
-            <h2 class="text-center">Au revoir</h2>
+        <div class="answer">
+            <div class="col-xs-6 answer answer-1 vertical">
+                <h2 class="text-center" id="answer-1">Bonjour</h2>
+            </div>
+            <div class="col-xs-6 answer answer-2 vertical">
+                <h2 class="text-center" id="answer-2">Au revoir</h2>
+            </div>
         </div>
     </cheval>
 </body>

@@ -4,9 +4,9 @@ var nfc  = require('nfc').nfc
   , devices = nfc.scan()
   ;
 
-var http = require('http'),
-fs       = require('fs');
-  
+  var app = require('http').createServer(handler)
+var io = require('socket.io')(app);
+var fs = require('fs');
 
 console.log('version: ' + util.inspect(version, { depth: null }));
 console.log('devices: ' + util.inspect(devices, { depth: null }));
@@ -36,17 +36,22 @@ function read(deviceID) {
 
 for (var deviceID in devices) read(deviceID);
 
-var server = http.createServer(function(req, res) {
-  fs.readFile('html/index.html', function(err, data) {
+app.listen(80);
+console.log("Serveur web so hitek lancé ... #guiguituto&cie");
+
+function handler (req, res) {
+  fs.readFile(__dirname + '/html/index.html',
+  function (err, data) {
     if (err) {
       res.writeHead(500);
+      return res.end('Error loading index.html');
     }
-    else {
-      res.writeHead(200, { 'Content-Type': 'text/html'});
-      res.end(data);
-    }
-  });
-});
 
-server.listen(80);
-console.log("Serveur web so hitek lancé ... #guiguituto&cie");
+    res.writeHead(200);
+    res.end(data);
+  });
+}
+
+io.on('connection', function (socket) {
+
+});
