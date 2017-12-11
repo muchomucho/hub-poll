@@ -19,7 +19,7 @@ function read(deviceID) {
   var nfcdev = new nfc.NFC();
 
   nfcdev.on('read', function(tag) {
-        data = []
+        data = {}
         data.left = false;
         data.right = false;
         if (deviceName == "")
