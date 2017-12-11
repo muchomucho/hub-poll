@@ -20,6 +20,13 @@
             $("answer-2").text(data.answer_2);
         });
 
+        socket.on('selected', function(data){
+
+        });
+
+        setInterval(function(){
+            $("#answer-1").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+        }, 2000);
 </script>
 </head>
 <style>
