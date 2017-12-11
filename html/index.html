@@ -21,12 +21,9 @@
         });
 
         socket.on('selected', function(data){
-
+            $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
         });
 
-        setInterval(function(){
-            $("#answer-1").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-        }, 2000);
 </script>
 </head>
 <style>
@@ -39,7 +36,8 @@ body{
     background-color: #2c3e50;
     color: #ecf0f1;
     height: 10vh;
-    padding-top: 3vh;
+    padding-top: 2vh;
+    font-size: 55px;
 }
 .answer{
     height: 90vh;
@@ -50,25 +48,27 @@ body{
 .answer-1{
     background-color: #27ae60;
     color: #ecf0f1;
+    font-size: 55px;
 }
 .answer-2{
     background-color: #c0392b;
     color: #ecf0f1;
+    font-size: 55px;
 }
 </style>
 <body>
-    <cheval class="poney">
+    <div class="poney" id="body">
         <div class="text-center">
-            <h1 class="question" id="question">Ma super question qui tue ?</h1>
+            <h1 class="question" id="question">Oui ou non ?</h1>
         </div>
         <div class="answer">
             <div class="col-xs-6 answer answer-1 vertical">
-                <h2 class="text-center" id="answer-1">Bonjour</h2>
+                <p class="text-center" id="answer-1">Oui</p>
             </div>
             <div class="col-xs-6 answer answer-2 vertical">
-                <h2 class="text-center" id="answer-2">Au revoir</h2>
+                <p class="text-center" id="answer-2">Non</p>
             </div>
         </div>
-    </cheval>
+    </div>
 </body>
 </html>
