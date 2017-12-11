@@ -1,0 +1,51 @@
+<html ng-app="app">
+<head>
+	<title>StrawPollThis</title>
+	<meta charset="UTF-8" />
+	<script type="text/javascript" src="./app/public/js/bundle.js"></script>
+<link href="./app/public/css/index.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body ng-controller="HomeCtrl">
+	<div class="container">
+	     <h3>Configuratationnage</h3> <br />
+	     <a href="./stats.html">les stats lourdzer</a>
+	    <hr>
+	    <form method="POST" ng-submit="onSave()">
+	    <div class="row">
+	        <div class="col-lg-6">
+	            <div class="form-group">
+	                <label>Question ? Pour un champion !</label>
+	                <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+	                    <input 	type="text" class="form-control" name="Username" id="Username" ng-model="form.question"
+	                    		placeholder="blablabla" required value="SeanWessell"
+	                    />
+	                </div>
+	            </div>
+
+	            <div class="form-group">
+	                <label>Réponse 1</label>
+	                <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+	                    <input 	type="text" class="form-control" name="Username" id="Username" ng-model="form.resp1"
+	                    		placeholder="" required value="SeanWessell"
+	                    />
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label>Réponse 2</label>
+	                <div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+	                    <input 	type="text" class="form-control" name="Username" id="Username" ng-model="form.resp2"
+	                    		placeholder="" required value="SeanWessell"
+	                    />
+	                </div>
+	            </div>
+
+	            <input type="submit" name="submit" id="submit" value="Sauvegardation" class="btn btn-primary pull-right"> <br />
+	            <span ng-if="form.error" style="color: red;">{{form.error}}</span>
+	            <span ng-if="form.success" style="color: green;">{{form.success}}</span>
+	        </div>
+	    </div>
+		</form>
+	</div>
+</body>
+</html>

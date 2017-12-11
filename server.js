@@ -51,7 +51,11 @@ function read(deviceID) {
     read(deviceID);
   });
 
-  console.log(nfcdev.start(deviceID));
+  try {
+    console.log(nfcdev.start(deviceID));
+  } catch (e) {
+    read(deviceID);
+  }
 }
 
 for (var deviceID in devices) read(deviceID);
