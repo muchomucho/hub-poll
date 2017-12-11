@@ -9,6 +9,7 @@ var io = require('socket.io')(app);
 var fs = require('fs');
 
 var deviceName = "";
+var tags_old = [];
 
 console.log('version: ' + util.inspect(version, { depth: null }));
 console.log('devices: ' + util.inspect(devices, { depth: null }));
@@ -27,13 +28,19 @@ function read(deviceID) {
         }
         else if (deviceName == deviceID)
         { // Left
-          data.left = true;
-          console.log("gauche");
+          if (tags_old.indexOf(tag.uid) >= 0) {
+            data.left = true;
+            console.log("gauche");
+            tags_old.push(tag.uid);
+          }
         }
         else
         { // Right
-          data.right = true;
-          console.log("droite");
+          if (tags_old.indexOf(tag.uid) >= 0) {
+            data.right = true;
+            console.log("droite");
+            tags_old.push(tag.uid);
+          }
         }
         /*console.log("DATTAAAA");
         console.log(deviceID);
