@@ -23,10 +23,12 @@
 
         socket.on('right', function(data){
             $('#score-2').text(data);
+            $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
         });
 
         socket.on('left', function(data){
             $('#score-1').text(data);
+            $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
         });
 
 /*        socket.on('selected', function(data){
