@@ -13,7 +13,7 @@
         // C'est la faute de guillaume qui sait config un server js que je code ici.
         RIGHT = 0;
         LEFT = 0;
-        var socket = io('http://localhost');
+        var socket = io('http://localhost:8888');
 
         socket.on('change_question', function (data) {
             $("question").text(data.question);
@@ -21,7 +21,15 @@
             $("answer-2").text(data.answer_2);
         });
 
-        socket.on('selected', function(data){
+        socket.on('right', function(data){
+            $('#score-2').text(data);
+        });
+
+        socket.on('left', function(data){
+            $('#score-1').text(data);
+        });
+
+/*        socket.on('selected', function(data){
             console.log(data)
             if (data.right)
                 RIGHT++;
@@ -30,7 +38,7 @@
             $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
             $('#score-1').text(LEFT);
             $('#score-2').text(RIGHT);
-        });
+        });*/
 
 </script>
 </head>

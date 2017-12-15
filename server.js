@@ -1,88 +1,67 @@
-var nfc  = require('nfc').nfc
-  , util = require('util')
-  , version = nfc.version()
-  , devices = nfc.scan()
-  ;
-
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 var fs = require('fs');
 
-var deviceName = "";
-var tags_old = [];
+var tags_right = [];
+var tags_left = [];
 
-console.log('version: ' + util.inspect(version, { depth: null }));
-console.log('devices: ' + util.inspect(devices, { depth: null }));
-
-function read(deviceID) {
-  console.log('');
-  var nfcdev = new nfc.NFC();
-
-  nfcdev.on('read', function(tag) {
-        data = {}
-        data.left = false;
-        data.right = false;
-        if (deviceName == "")
-        {
-            deviceName = deviceID;
-        }
-        else if (deviceName == deviceID)
-        { // Left
-          if (tags_old.indexOf(tag.uid) >= 0) {
-            data.left = true;
-            console.log("gauche");
-            tags_old.push(tag.uid);
-          }
-        }
-        else
-        { // Right
-          if (tags_old.indexOf(tag.uid) >= 0) {
-            data.right = true;
-            console.log("droite");
-            tags_old.push(tag.uid);
-          }
-        }
-        /*console.log("DATTAAAA");
-        console.log(deviceID);
-        console.log(tag.uid);*/
-        io.emit('selected', data)
-        nfcdev.stop();
-  });
-
-  nfcdev.on('error', function(err) {
-    console.log(util.inspect(err, { depth: null }));
-  });
-
-  nfcdev.on('stopped', function() {
-    console.log('stopped');
-    read(deviceID);
-  });
-
-  try {
-    console.log(nfcdev.start(deviceID));
-  } catch (e) {
-    read(deviceID);
-  }
-}
-
-for (var deviceID in devices) read(deviceID);
-
-app.listen(80);
+/*
+** Web server confug (port : 8888)
+*/
+app.listen(8888);
 console.log("Serveur web so hitek lancé ... #guiguituto&cie");
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/html/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
+  var uri = req.url.split('?');
 
+  if (uri[0] == "/gauche") {
+    //request to register a tag
+    var tag = uri[1].split("=")[2];
+    /*
+    ** if tag not registered, add tag
+    */
+    console.log("tag left: " + tag);
+    if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
+      console.log("add tag left");
+      tags_left.push(tag);
+      io.emit("left", tags_left.length);
+    }
     res.writeHead(200);
-    res.end(data);
-  });
+    res.end("");
+  }
+  else if (uri[0] == "/droite") {
+    //request to register a tag
+    var tag = uri[1].split("=")[2];
+    /*
+    ** if tag not registered, add tag
+    */
+    console.log("tag right : " + tag);
+    if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
+      console.log("add tag right");
+      tags_right.push(tag);
+      io.emit("right", tags_right.length);
+    }
+    res.writeHead(200);
+    res.end("");
+  }
+  else {
+    //webserver
+    fs.readFile(__dirname + '/html/index.html', function (err, data) {
+      if (err) {
+        res.writeHead(500);
+        return res.end('Error loading index.html');
+      }
+
+      res.writeHead(200);
+      res.end(data);
+    });
+  }
 }
 
+/*
+** On client connexion, this callback is trigered
+*/
 io.on('connection', function (socket) {
-
+  io.emit("left", tags_left.length);
+  io.emit("right", tags_right.length);
 });
