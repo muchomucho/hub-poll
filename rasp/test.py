@@ -1,8 +1,12 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
-import requests
+import subprocess
 
-def request_url(uri, tag):
-        r = requests.get('http://localhost:8888' + uri + '?uid={}'.format(tag))
-
-request_url("/gauche", "tagdkjsfklsjfq")
+result = subprocess.run(['lsusb'], stdout=subprocess.PIPE)
+tab = result.stdout.decode().split('\n')
+for i in range(0, len(tab)) :
+        if tab[i].find("Advanced Card Systems") >= 0 :
+                bus = tab[i].split()[1]
+                dev = tab[i].split()[3]
+                print(bus)
+                print(dev.split(":")[0])
