@@ -6,10 +6,12 @@ var ioclient = require('socket.io-client');
 var tags_right = [];
 var tags_left = [];
 var act_question = "oui ou non ?";
+var act_resp_left = "oui";
+var act_resp_right = "non";
 
-function write_score_to_file(left, right, question)
+function write_score_to_file(left, right, question, res_left, resp_right)
 {
-  fs.writeFile(__dirname + "/save.json", JSON.stringify({"question": question, "left": left, "right": right}), function(err) {
+  fs.writeFile(__dirname + "/save.json", JSON.stringify({"question": question, "resp_left": resp_left, "resp_right": resp_right, "left": left, "right": right}), function(err) {
     if(err) {
         return console.log(err);
     }
@@ -28,10 +30,12 @@ function read_score_from_file()
     if (data && data != "") {
       try {
         var ret = JSON.parse(data);
-        if (ret && ret.left && ret.right && ret.question){
+        if (ret && ret.left && ret.right && ret.question && ret.resp_left && ret.resp_right){
           tags_right = ret.right;
           tags_left = ret.left;
-	  act_question = ret.question;
+          act_question = ret.question;
+          act_resp_left = ret.resp_left;
+          act_resp_right = ret.resp_right
         }
         else {
           console.log("json object invalid");
@@ -119,14 +123,39 @@ dash.on("get_form", function() {
 dash.on("set_question", function(question) {
 	console.log("setting question from dashboard");
 	act_question = question;
-	write_score_to_file(tags_left, tags_right, act_question);
-	io.emit("get_question", question);
+	write_score_to_file(tags_left, tags_right, act_question, act_resp_left, act_resp_right);
+	io.emit("get_question", [act_question, act_resp_left, act_resp_right]);
 });
+
+dash.on("set_response_left", function(data){
+	console.log("setting response left from dashboard");
+	act_resp_left = data;
+	write_score_to_file(tags_left, tags_right, act_question, act_resp_left, act_resp_right);
+	io.emit("get_question", [act_question, act_resp_left, act_resp_right]);
+})
+
+dash.on("set_response_right", function(data){
+	console.log("setting response right from dashboard");
+	act_resp_right = data;
+	write_score_to_file(tags_left, tags_right, act_question, act_resp_left, act_resp_right);
+	io.emit("get_question", [act_question, act_resp_left, act_resp_right]);
+})
 
 dash.on("get_question", function() {
 	console.log("sending question to dashboard");
   dash.emit("get_question", act_question);
 })
+
+dash.on("get_resp_left", function() {
+	console.log("sending left response to dashboard");
+  dash.emit("get_resp_left", act_resp_left);
+})
+
+dash.on("get_resp_right", function() {
+	console.log("sending right response to dashboard");
+  dash.emit("get_resp_right", act_resp_right);
+})
+
 
 dash.on("reset_score", function(){
   tags_left = [];
@@ -140,5 +169,5 @@ dash.on("reset_score", function(){
 io.on('connection', function (socket) {
   io.emit("left", tags_left.length);
   io.emit("right", tags_right.length);
-  io.emit("get_question", act_question);
+  io.emit("get_question", [act_question, act_resp_left, act_resp_right]);
 });
