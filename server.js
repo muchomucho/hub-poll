@@ -9,7 +9,7 @@ var act_question = "oui ou non ?";
 var act_resp_left = "oui";
 var act_resp_right = "non";
 
-function write_score_to_file(left, right, question, res_left, resp_right)
+function write_score_to_file(left, right, question, resp_left, resp_right)
 {
   fs.writeFile(__dirname + "/save.json", JSON.stringify({"question": question, "resp_left": resp_left, "resp_right": resp_right, "left": left, "right": right}), function(err) {
     if(err) {
@@ -73,7 +73,7 @@ function handler (req, res) {
     if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
       console.log("add tag left");
       tags_left.push(tag);
-      write_score_to_file(tags_left, tags_right, act_question);
+      write_score_to_file(tags_left, tags_right, act_question, act_resp_left, act_resp_right);
       io.emit("left", tags_left.length);
       dash.emit("get_form", [tags_left.length, tags_right.length]);
     }
@@ -90,7 +90,7 @@ function handler (req, res) {
     if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
       console.log("add tag right");
       tags_right.push(tag);
-      write_score_to_file(tags_left, tags_right, act_question);
+      write_score_to_file(tags_left, tags_right, act_question, act_resp_left, act_resp_right);
       io.emit("right", tags_right.length);
       dash.emit("get_form", [tags_left.length, tags_right.length]);
     }
