@@ -19,6 +19,8 @@
             $("question").text(data.question);
             $("answer-1").text(data.answer_1);
             $("answer-2").text(data.answer_2);
+            $("#score-1").text("");
+            $("#score-2").text("");
         });
 
         socket.on('right', function(data){
@@ -30,9 +32,9 @@
             $('#score-1').text(data);
             $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
         });
-	socket.on("get_question", function(data){
-		$("#question").text(data);
-	})
+        socket.on("get_question", function(data){
+            $("#question").text(data);
+        })
 
 /*        socket.on('selected', function(data){
             console.log(data)
