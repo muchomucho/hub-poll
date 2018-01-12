@@ -8,7 +8,6 @@ import datetime
 import threading
 import requests
 import time
-from socketIO_client import SocketIO, LoggingNamespace
 
 deviceid = ""
 

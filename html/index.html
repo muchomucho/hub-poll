@@ -30,6 +30,9 @@
             $('#score-1').text(data);
             $('#body').fadeIn(100).fadeOut(100).fadeIn(100);
         });
+	socket.on("get_question", function(data){
+		$("#question").text(data);
+	})
 
 /*        socket.on('selected', function(data){
             console.log(data)
@@ -77,7 +80,7 @@ body{
 <body>
     <div class="poney" id="body">
         <div class="text-center">
-            <h1 class="question" id="question">Oui ou non ?</h1>
+            <h1 class="question" id="question">Default</h1>
         </div>
         <div class="answer">
             <div class="col-xs-6 answer answer-1 vertical">
