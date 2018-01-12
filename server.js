@@ -7,9 +7,9 @@ var tags_right = [];
 var tags_left = [];
 var act_question = "oui ou non ?";
 
-function write_score_to_file(left, right)
+function write_score_to_file(left, right, question)
 {
-  fs.writeFile(__dirname + "/save.json", {"left": JSON.stringify(left), "right": JSON.stringify(right)}, function(err) {
+  fs.writeFile(__dirname + "/save.json", JSON.stringify({"question": question, "left": left, "right": right}), function(err) {
     if(err) {
         return console.log(err);
     }
@@ -28,9 +28,10 @@ function read_score_from_file()
     if (data && data != "") {
       try {
         var ret = JSON.parse(data);
-        if (ret && ret.left && ret.right){
+        if (ret && ret.left && ret.right && ret.question){
           tags_right = ret.right;
           tags_left = ret.left;
+	  act_question = ret.question;
         }
         else {
           console.log("json object invalid");
@@ -68,7 +69,7 @@ function handler (req, res) {
     if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
       console.log("add tag left");
       tags_left.push(tag);
-      write_score_to_file(tags_left, tags_right);
+      write_score_to_file(tags_left, tags_right, act_question);
       io.emit("left", tags_left.length);
       dash.emit("get_form", [tags_left.length, tags_right.length]);
     }
@@ -85,7 +86,7 @@ function handler (req, res) {
     if (tags_right.indexOf(tag) < 0 && tags_left.indexOf(tag) < 0) {
       console.log("add tag right");
       tags_right.push(tag);
-      write_score_to_file(tags_left, tags_right);
+      write_score_to_file(tags_left, tags_right, act_question);
       io.emit("right", tags_right.length);
       dash.emit("get_form", [tags_left.length, tags_right.length]);
     }
@@ -118,6 +119,7 @@ dash.on("get_form", function() {
 dash.on("set_question", function(question) {
 	console.log("setting question from dashboard");
 	act_question = question;
+	write_score_to_file(tags_left, tags_right, act_question);
 	io.emit("get_question", question);
 });
 
@@ -130,7 +132,7 @@ dash.on("reset_score", function(){
   tags_left = [];
   tags_right = [];
   //write on file
-  write_score_to_file(tags_left, tags_right);
+  write_score_to_file(tags_left, tags_right, act_question);
   io.emit("left", tags_left.length);
   io.emit("right", tags_right.length);  
 });
